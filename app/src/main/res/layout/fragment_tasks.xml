@@ -11,8 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/surface_dark"
-        android:tabTextColor="@color/text_secondary"
-        android:tabSelectedTextColor="@color/green_primary" />
+        app:tabTextColor="@color/text_secondary"
+        app:tabSelectedTextColor="@color/green_primary"
+        xmlns:app="http://schemas.android.com/apk/res-auto" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTasks"

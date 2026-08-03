@@ -13,7 +13,6 @@ import at.pichler.digitaleshirn.repository.AppRepository
 import at.pichler.digitaleshirn.speech.GermanSpeechParser
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
@@ -46,6 +45,7 @@ class MainViewModel(
 
     fun saveTask(input: TaskInput, taskId: Long? = null, onDone: (() -> Unit)? = null) {
         viewModelScope.launch {
+            val existingTask = taskId?.let { id -> repository.getTask(id) }
             val task = TaskEntity(
                 id = taskId ?: 0,
                 title = input.title,
@@ -55,7 +55,8 @@ class MainViewModel(
                 dueDate = input.dueDate,
                 dueTime = input.dueTime,
                 reminderEnabled = input.reminderEnabled,
-                completed = input.completed
+                completed = input.completed,
+                createdAt = existingTask?.createdAt ?: java.time.LocalDateTime.now()
             )
 
             val id = if (taskId == null) repository.createTask(task) else {
@@ -92,7 +93,17 @@ class MainViewModel(
     fun saveInbox(id: Long? = null, text: String, projectId: Long? = null) {
         viewModelScope.launch {
             if (id == null) repository.createInbox(InboxEntryEntity(text = text, projectId = projectId))
-            else repository.updateInbox(InboxEntryEntity(id = id, text = text, projectId = projectId))
+            else {
+                val existing = inbox.value.firstOrNull { it.id == id }
+                repository.updateInbox(
+                    InboxEntryEntity(
+                        id = id,
+                        text = text,
+                        projectId = projectId,
+                        createdAt = existing?.createdAt ?: java.time.LocalDateTime.now()
+                    )
+                )
+            }
         }
     }
 
@@ -117,7 +128,16 @@ class MainViewModel(
     fun saveProject(id: Long? = null, name: String) {
         viewModelScope.launch {
             if (id == null) repository.createProject(ProjectEntity(name = name))
-            else repository.updateProject(ProjectEntity(id = id, name = name))
+            else {
+                val existing = projects.value.firstOrNull { it.id == id }
+                repository.updateProject(
+                    ProjectEntity(
+                        id = id,
+                        name = name,
+                        createdAt = existing?.createdAt ?: java.time.LocalDateTime.now()
+                    )
+                )
+            }
         }
     }
 
@@ -128,7 +148,18 @@ class MainViewModel(
     fun saveNote(id: Long? = null, title: String, text: String, projectId: Long? = null) {
         viewModelScope.launch {
             if (id == null) repository.createNote(NoteEntity(title = title, text = text, projectId = projectId))
-            else repository.updateNote(NoteEntity(id = id, title = title, text = text, projectId = projectId))
+            else {
+                val existing = notes.value.firstOrNull { it.id == id }
+                repository.updateNote(
+                    NoteEntity(
+                        id = id,
+                        title = title,
+                        text = text,
+                        projectId = projectId,
+                        createdAt = existing?.createdAt ?: java.time.LocalDateTime.now()
+                    )
+                )
+            }
         }
     }
 

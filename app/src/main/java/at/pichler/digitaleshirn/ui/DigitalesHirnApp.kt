@@ -54,6 +54,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -214,7 +215,7 @@ private fun HomeTile(title: String, modifier: Modifier = Modifier, onClick: () -
 
 @Composable
 private fun TodayScreen(vm: MainViewModel, navController: NavHostController) {
-    val items by vm.todayTasks.collectAsStateCompat()
+    val items by vm.todayTasks.collectAsState()
     ScreenScaffold("Heute", navController, fab = {
         FloatingActionButton(onClick = { navController.navigate("task/new") }) { Icon(Icons.Default.Add, null) }
     }) { padding ->
@@ -230,7 +231,7 @@ private fun TodayScreen(vm: MainViewModel, navController: NavHostController) {
 
 @Composable
 private fun InboxScreen(vm: MainViewModel, navController: NavHostController) {
-    val entries by vm.inbox.collectAsStateCompat()
+    val entries by vm.inbox.collectAsState()
     var editing by remember { mutableStateOf<InboxEntryEntity?>(null) }
     var text by rememberSaveable { mutableStateOf("") }
 
@@ -275,7 +276,7 @@ private fun InboxScreen(vm: MainViewModel, navController: NavHostController) {
 
 @Composable
 private fun ProjectsScreen(vm: MainViewModel, navController: NavHostController) {
-    val projects by vm.projects.collectAsStateCompat()
+    val projects by vm.projects.collectAsState()
     var newName by rememberSaveable { mutableStateOf("") }
     var renameProject by remember { mutableStateOf<ProjectEntity?>(null) }
     var renameText by rememberSaveable { mutableStateOf("") }
@@ -338,7 +339,7 @@ private fun ProjectsScreen(vm: MainViewModel, navController: NavHostController) 
 
 @Composable
 private fun ProjectDetailScreen(vm: MainViewModel, navController: NavHostController, projectId: Long) {
-    val tasks by vm.tasks.collectAsStateCompat()
+    val tasks by vm.tasks.collectAsState()
     val projectName = vm.projectName(projectId)
     val filtered = tasks.filter { it.projectId == projectId }
     ScreenScaffold(projectName, navController) { padding ->
@@ -354,7 +355,7 @@ private fun ProjectDetailScreen(vm: MainViewModel, navController: NavHostControl
 
 @Composable
 private fun NotesScreen(vm: MainViewModel, navController: NavHostController) {
-    val notes by vm.notes.collectAsStateCompat()
+    val notes by vm.notes.collectAsState()
     var query by rememberSaveable { mutableStateOf("") }
     var editNote by remember { mutableStateOf<NoteEntity?>(null) }
     var title by rememberSaveable { mutableStateOf("") }
@@ -420,7 +421,7 @@ private fun NotesScreen(vm: MainViewModel, navController: NavHostController) {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun TaskEditorScreen(vm: MainViewModel, navController: NavHostController, taskId: Long?) {
-    val projects by vm.projects.collectAsStateCompat()
+    val projects by vm.projects.collectAsState()
     val existing = taskId?.let(vm::getTask)
 
     var title by rememberSaveable(taskId) { mutableStateOf(existing?.title ?: "") }
@@ -568,5 +569,5 @@ private fun ScreenScaffold(
 }
 
 @Composable
-private fun <T> kotlinx.coroutines.flow.StateFlow<T>.collectAsStateCompat() =
+private fun <T> kotlinx.coroutines.flow.StateFlow<T>.collectAsState() =
     androidx.compose.runtime.collectAsState(value)

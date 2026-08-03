@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.pichler.digitaleshirn.ui.home.HomeFragment"
+        android:label="Digitales Hirn"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/tasksFragment"
+        android:name="com.pichler.digitaleshirn.ui.tasks.TasksFragment"
+        android:label="Aufgaben"
+        tools:layout="@layout/fragment_tasks" />
+
+    <fragment
+        android:id="@+id/notesFragment"
+        android:name="com.pichler.digitaleshirn.ui.notes.NotesFragment"
+        android:label="Notizen"
+        tools:layout="@layout/fragment_notes" />
+
+    <fragment
+        android:id="@+id/ideasFragment"
+        android:name="com.pichler.digitaleshirn.ui.ideas.IdeasFragment"
+        android:label="Ideen"
+        tools:layout="@layout/fragment_ideas" />
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.pichler.digitaleshirn.ui.search.SearchFragment"
+        android:label="Suche"
+        tools:layout="@layout/fragment_search" />
+
+    <dialog
+        android:id="@+id/editEntryDialog"
+        android:name="com.pichler.digitaleshirn.ui.shared.EditEntryDialog"
+        android:label="Eintrag bearbeiten">
+        <argument
+            android:name="entryId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/voiceInputDialog"
+        android:name="com.pichler.digitaleshirn.ui.home.VoiceInputDialog"
+        android:label="Spracheingabe" />
+
+</navigation>

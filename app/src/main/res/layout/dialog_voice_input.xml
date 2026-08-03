@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_btn_speak_now"
             app:backgroundTint="@color/green_primary"
-            app:fabSize="large"
+            app:fabSize="normal"
             android:contentDescription="@string/mic_button_desc" />
 
         <TextView

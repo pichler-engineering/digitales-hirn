@@ -54,7 +54,7 @@ class NotesFragment : Fragment() {
             },
             onConvertToTask = { entry ->
                 lifecycleScope.launch {
-                    viewModel.updateEntry(entry.copy(category = Category.AUFGABE))
+                    viewModel.updateEntry(entry.copy(category = Category.TASK))
                 }
             }
         )

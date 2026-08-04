@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pichler.digitaleshirn.R
 import com.pichler.digitaleshirn.data.Category
+import com.pichler.digitaleshirn.data.CategorySettingsRepository
 import com.pichler.digitaleshirn.data.Entry
 import com.pichler.digitaleshirn.databinding.ItemEntryBinding
 import java.text.SimpleDateFormat
@@ -41,8 +42,9 @@ class EntryAdapter(
         private val timeFormat = SimpleDateFormat("HH:mm", Locale.GERMAN)
 
         fun bind(entry: Entry) {
+            val catSettings = CategorySettingsRepository.getInstance(binding.root.context)
             binding.tvTitle.text = entry.title
-            binding.tvCategory.text = entry.category.displayName
+            binding.tvCategory.text = catSettings.getDisplayName(entry.category)
 
             // Category dot color
             val dotColor = getCategoryColor(entry.category)
@@ -64,7 +66,7 @@ class EntryAdapter(
             }
 
             // Checkbox for tasks
-            if (showCheckbox && entry.category == Category.AUFGABE) {
+            if (showCheckbox && entry.category == Category.TASK) {
                 binding.cbCompleted.visibility = View.VISIBLE
                 binding.cbCompleted.isChecked = entry.isCompleted
                 binding.cbCompleted.setOnCheckedChangeListener(null)
@@ -107,7 +109,7 @@ class EntryAdapter(
             }
 
             // Priority indicator
-            if (entry.category == Category.AUFGABE && entry.priority != 1) {
+            if (entry.category == Category.TASK && entry.priority != 1) {
                 binding.priorityIndicator.visibility = View.VISIBLE
                 val priorityColor = when (entry.priority) {
                     0 -> R.color.priority_low
@@ -140,7 +142,7 @@ class EntryAdapter(
         private fun showPopupMenu(view: View, entry: Entry) {
             PopupMenu(view.context, view).apply {
                 menu.add(0, 1, 0, view.context.getString(R.string.action_edit))
-                if (entry.category != Category.AUFGABE) {
+                if (entry.category != Category.TASK) {
                     onConvertToTask?.let {
                         menu.add(0, 2, 1, view.context.getString(R.string.action_convert_to_task))
                     }
@@ -160,10 +162,10 @@ class EntryAdapter(
         }
 
         private fun getCategoryColor(category: Category): Int = when (category) {
-            Category.AUFGABE -> R.color.category_task
-            Category.ERINNERUNG -> R.color.category_reminder
-            Category.NOTIZ -> R.color.category_note
-            Category.IDEE -> R.color.category_idea
+            Category.TASK -> R.color.category_task
+            Category.REMINDER -> R.color.category_reminder
+            Category.NOTE -> R.color.category_note
+            Category.IDEA -> R.color.category_idea
         }
     }
 

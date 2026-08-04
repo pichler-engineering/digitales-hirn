@@ -7,5 +7,5 @@ class Converters {
     fun fromCategory(category: Category?): String? = category?.name
 
     @TypeConverter
-    fun toCategory(value: String?): Category? = value?.let(Category::valueOf)
+    fun toCategory(value: String?): Category? = value?.let { Category.fromDbValue(it) }
 }

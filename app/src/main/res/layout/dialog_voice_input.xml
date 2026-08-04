@@ -37,6 +37,61 @@
 
     </LinearLayout>
 
+    <!-- Large category chips – always visible -->
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_small"
+        app:singleSelection="true"
+        app:chipSpacingHorizontal="8dp">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipTask"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:chipBackgroundColor="@color/chip_category_bg"
+            app:checkedIconVisible="false" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipReminder"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:chipBackgroundColor="@color/chip_category_bg"
+            app:checkedIconVisible="false" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipNote"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:chipBackgroundColor="@color/chip_category_bg"
+            app:checkedIconVisible="false" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipIdea"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:chipBackgroundColor="@color/chip_category_bg"
+            app:checkedIconVisible="false" />
+
+    </com.google.android.material.chip.ChipGroup>
+
     <!-- Recognized text input -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutText"
@@ -58,36 +113,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Detected category -->
-    <LinearLayout
-        android:id="@+id/layoutCategory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/spacing_medium"
-        android:gravity="center_vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Kategorie:"
-            android:textColor="@color/text_secondary"
-            android:textSize="14sp"
-            android:layout_marginEnd="@dimen/spacing_small" />
-
-        <Spinner
-            android:id="@+id/spinnerCategory"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/surface_elevated"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp" />
-
-    </LinearLayout>
-
-    <!-- Date & Time (shown for tasks/reminders) -->
+    <!-- Date & Time -->
     <LinearLayout
         android:id="@+id/layoutDateTime"
         android:layout_width="match_parent"
@@ -207,3 +233,4 @@
     </LinearLayout>
 
 </LinearLayout>
+

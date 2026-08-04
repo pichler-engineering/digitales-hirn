@@ -21,7 +21,7 @@ class ReminderReceiver : BroadcastReceiver() {
         }
         val categoryName = intent?.getStringExtra(ReminderManager.EXTRA_ENTRY_CATEGORY)
         val category = categoryName?.let { runCatching { Category.valueOf(it) }.getOrNull() }
-        val contentText = category?.displayName?.let { "Kategorie: $it" } ?: "Erinnerung"
+        val contentText = category?.defaultName?.let { "Kategorie: $it" } ?: "Erinnerung"
 
         val notification = NotificationCompat.Builder(context, ReminderManager.CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)

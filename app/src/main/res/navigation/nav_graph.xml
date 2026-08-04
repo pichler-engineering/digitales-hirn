@@ -35,6 +35,12 @@
         android:label="Suche"
         tools:layout="@layout/fragment_search" />
 
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.pichler.digitaleshirn.ui.settings.SettingsFragment"
+        android:label="Kategorien"
+        tools:layout="@layout/fragment_settings" />
+
     <dialog
         android:id="@+id/editEntryDialog"
         android:name="com.pichler.digitaleshirn.ui.shared.EditEntryDialog"

@@ -13,6 +13,49 @@
         <item name="android:statusBarColor">@color/background_dark</item>
         <item name="android:navigationBarColor">@color/background_dark</item>
         <item name="android:windowLightStatusBar">false</item>
+        <!-- Improved dark mode: spinner/dropdown text -->
+        <item name="android:spinnerItemStyle">@style/Widget.DigitalesHirn.SpinnerItem</item>
+        <item name="android:spinnerDropDownItemStyle">@style/Widget.DigitalesHirn.SpinnerDropDownItem</item>
+        <!-- Improved dialogs -->
+        <item name="alertDialogTheme">@style/Theme.DigitalesHirn.AlertDialog</item>
+        <item name="materialAlertDialogTheme">@style/Theme.DigitalesHirn.AlertDialog</item>
+        <!-- Outlined text fields -->
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+    </style>
+
+    <style name="Theme.DigitalesHirn.AlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="android:background">@color/surface_dark</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.DigitalesHirn.Button.Positive</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.DigitalesHirn.Button.Negative</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.DigitalesHirn.Button.Neutral</item>
+    </style>
+
+    <style name="Widget.DigitalesHirn.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/green_primary</item>
+    </style>
+
+    <style name="Widget.DigitalesHirn.Button.Negative" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/red_delete</item>
+    </style>
+
+    <style name="Widget.DigitalesHirn.Button.Neutral" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="Widget.DigitalesHirn.SpinnerItem" parent="Widget.AppCompat.TextView.SpinnerItem">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:background">@color/surface_control</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+    </style>
+
+    <style name="Widget.DigitalesHirn.SpinnerDropDownItem" parent="Widget.AppCompat.DropDownItem.Spinner">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:background">@color/surface_elevated</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
     </style>
 
     <style name="Theme.DigitalesHirn.AppBar" parent="Widget.MaterialComponents.Toolbar">
@@ -50,5 +93,10 @@
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Settings screen -->
+    <style name="Theme.DigitalesHirn.Settings" parent="Theme.DigitalesHirn">
+        <item name="colorPrimary">@color/green_primary</item>
     </style>
 </resources>

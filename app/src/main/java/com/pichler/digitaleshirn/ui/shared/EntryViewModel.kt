@@ -27,8 +27,8 @@ class EntryViewModel(
     val todayTasks: LiveData<List<Entry>> = repository
         .getTodayTasks(todayBounds.first, todayBounds.second)
         .asLiveData()
-    val notes: LiveData<List<Entry>> = repository.getEntriesByCategory(Category.NOTIZ).asLiveData()
-    val ideas: LiveData<List<Entry>> = repository.getEntriesByCategory(Category.IDEE).asLiveData()
+    val notes: LiveData<List<Entry>> = repository.getEntriesByCategory(Category.NOTE).asLiveData()
+    val ideas: LiveData<List<Entry>> = repository.getEntriesByCategory(Category.IDEA).asLiveData()
 
     suspend fun insertEntry(entry: Entry) {
         val id = repository.insert(entry)

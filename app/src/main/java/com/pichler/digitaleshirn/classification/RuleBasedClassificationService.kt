@@ -1,10 +1,12 @@
 package com.pichler.digitaleshirn.classification
 
 import com.pichler.digitaleshirn.data.Category
+import com.pichler.digitaleshirn.data.CategorySettingsRepository
 import java.util.Locale
 
 class RuleBasedClassificationService(
-    private val dateTimeParser: GermanDateTimeParser = GermanDateTimeParser()
+    private val dateTimeParser: GermanDateTimeParser = GermanDateTimeParser(),
+    private val categorySettings: CategorySettingsRepository? = null
 ) : ClassificationService {
 
     private val reminderTriggers = listOf("erinnere mich", "erinnerung", "reminder")
@@ -70,6 +72,29 @@ class RuleBasedClassificationService(
     override suspend fun classify(text: String): ClassificationResult {
         val cleanedText = text.trim()
         val normalized = cleanedText.lowercase(Locale.GERMAN)
+
+        // 1. Try first-word detection (highest priority)
+        val firstWordResult = detectFirstWordCategory(cleanedText, normalized)
+        if (firstWordResult != null) {
+            val (category, strippedText) = firstWordResult
+            val parseResult = dateTimeParser.parse(strippedText)
+            val title = extractTitle(strippedText)
+            val keywords = extractKeywords(strippedText)
+            val reminderEnabled = category == Category.REMINDER ||
+                (parseResult.date != null && parseResult.time != null)
+            val dueTime = parseResult.time ?: defaultDueTime(parseResult.date, reminderEnabled)
+            return ClassificationResult(
+                category = category,
+                title = title.ifBlank { strippedText.take(80) },
+                keywords = keywords,
+                dueDate = parseResult.date,
+                dueTime = dueTime,
+                needsDateCheck = parseResult.needsDateCheck,
+                reminderEnabled = reminderEnabled
+            )
+        }
+
+        // 2. Fallback to heuristic classification
         val parseResult = dateTimeParser.parse(cleanedText)
         val hasReminderTrigger = reminderTriggers.any(normalized::contains)
         val hasIdeaTrigger = ideaTriggers.any(normalized::contains)
@@ -78,25 +103,54 @@ class RuleBasedClassificationService(
             Regex("(?:\\bum\\s*)?([01]?\\d|2[0-3])(?::([0-5]\\d))?\\s*uhr\\b").containsMatchIn(normalized)
 
         val category = when {
-            hasReminderTrigger -> Category.ERINNERUNG
-            hasIdeaTrigger -> Category.IDEE
-            hasTaskKeyword || hasDateTimeTrigger || parseResult.date != null || parseResult.time != null -> Category.AUFGABE
-            else -> Category.NOTIZ
+            hasReminderTrigger -> Category.REMINDER
+            hasIdeaTrigger -> Category.IDEA
+            hasTaskKeyword || hasDateTimeTrigger || parseResult.date != null || parseResult.time != null -> Category.TASK
+            else -> Category.NOTE
         }
 
         val title = extractTitle(cleanedText)
         val keywords = extractKeywords(cleanedText)
         val reminderEnabled = hasReminderTrigger || (parseResult.date != null && parseResult.time != null)
+        val dueTime = parseResult.time ?: defaultDueTime(parseResult.date, reminderEnabled)
 
         return ClassificationResult(
             category = category,
             title = title,
             keywords = keywords,
             dueDate = parseResult.date,
-            dueTime = parseResult.time,
+            dueTime = dueTime,
             needsDateCheck = parseResult.needsDateCheck,
             reminderEnabled = reminderEnabled
         )
+    }
+
+    /**
+     * Checks if the first word(s) match a category keyword (default or custom).
+     * Returns (Category, textWithKeywordRemoved) or null if no match.
+     */
+    private fun detectFirstWordCategory(originalText: String, normalized: String): Pair<Category, String>? {
+        val keywordMap = categorySettings?.buildKeywordMap() ?: Category.defaultKeywords
+        // Sort by descending length so multi-word keywords are checked first
+        val sortedKeywords = keywordMap.keys.sortedByDescending { it.length }
+
+        for (keyword in sortedKeywords) {
+            if (normalized.startsWith(keyword)) {
+                val rest = originalText.drop(keyword.length).trimStart()
+                // Capitalize first letter of the remaining text
+                val strippedText = if (rest.isNotEmpty()) {
+                    rest[0].uppercaseChar() + rest.drop(1)
+                } else {
+                    rest
+                }
+                return keywordMap[keyword]!! to strippedText
+            }
+        }
+        return null
+    }
+
+    private fun defaultDueTime(dueDate: Long?, reminderEnabled: Boolean): Long? {
+        return if (dueDate != null && reminderEnabled) DEFAULT_REMINDER_TIME else null
     }
 
     private fun extractTitle(text: String): String {
@@ -126,5 +180,9 @@ class RuleBasedClassificationService(
             .distinct()
             .take(8)
             .toList()
+    }
+
+    companion object {
+        private const val DEFAULT_REMINDER_TIME = 9L * 60L * 60L * 1000L
     }
 }

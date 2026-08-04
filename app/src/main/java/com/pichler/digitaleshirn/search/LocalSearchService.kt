@@ -11,10 +11,10 @@ class LocalSearchService(
 
     override suspend fun search(query: String): List<Entry> {
         val categoryOrder = mapOf(
-            Category.AUFGABE to 0,
-            Category.NOTIZ to 1,
-            Category.IDEE to 2,
-            Category.ERINNERUNG to 3
+            Category.TASK to 0,
+            Category.NOTE to 1,
+            Category.IDEA to 2,
+            Category.REMINDER to 3
         )
 
         return repository.searchEntries(query)

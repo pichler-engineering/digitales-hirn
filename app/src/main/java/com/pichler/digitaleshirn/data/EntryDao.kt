@@ -18,7 +18,7 @@ interface EntryDao {
     @Query(
         """
         SELECT * FROM entries
-        WHERE category = 'AUFGABE' AND isCompleted = :isCompleted
+        WHERE category = 'TASK' AND isCompleted = :isCompleted
         ORDER BY CASE WHEN dueDate IS NULL THEN 1 ELSE 0 END, dueDate ASC, dueTime ASC, createdAt DESC
         """
     )
@@ -27,7 +27,7 @@ interface EntryDao {
     @Query(
         """
         SELECT * FROM entries
-        WHERE category = 'AUFGABE'
+        WHERE category = 'TASK'
           AND isCompleted = 0
           AND dueDate IS NOT NULL
           AND dueDate < CAST(strftime('%s', 'now') AS INTEGER) * 1000
@@ -39,7 +39,7 @@ interface EntryDao {
     @Query(
         """
         SELECT * FROM entries
-        WHERE category = 'AUFGABE'
+        WHERE category = 'TASK'
           AND isCompleted = 0
           AND dueDate BETWEEN :startOfDay AND :endOfDay
         ORDER BY dueDate ASC, dueTime ASC, createdAt DESC

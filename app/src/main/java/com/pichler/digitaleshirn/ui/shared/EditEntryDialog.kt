@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.pichler.digitaleshirn.R
 import com.pichler.digitaleshirn.data.Category
+import com.pichler.digitaleshirn.data.CategorySettingsRepository
 import com.pichler.digitaleshirn.data.Entry
 import com.pichler.digitaleshirn.databinding.DialogEditEntryBinding
 import kotlinx.coroutines.launch
@@ -63,7 +64,8 @@ class EditEntryDialog : DialogFragment() {
     }
 
     private fun setupCategorySpinner() {
-        val categories = Category.values().map { it.displayName }
+        val catSettings = CategorySettingsRepository.getInstance(requireContext())
+        val categories = Category.entries.map { catSettings.getDisplayName(it) }
         val adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
@@ -80,7 +82,7 @@ class EditEntryDialog : DialogFragment() {
         val entry = existingEntry ?: return
         binding.etTitle.setText(entry.title)
         binding.etDescription.setText(entry.description)
-        binding.spinnerCategory.setSelection(Category.values().indexOf(entry.category))
+        binding.spinnerCategory.setSelection(Category.entries.indexOf(entry.category))
         binding.switchReminder.isChecked = entry.reminderEnabled
         binding.etKeywords.setText(entry.keywords.replace(",", ", "))
 
@@ -168,7 +170,7 @@ class EditEntryDialog : DialogFragment() {
         }
 
         val categoryIndex = binding.spinnerCategory.selectedItemPosition
-        val category = Category.values()[categoryIndex]
+        val category = Category.entries[categoryIndex]
         val description = binding.etDescription.text?.toString()?.trim() ?: ""
         val keywords = binding.etKeywords.text?.toString()?.trim() ?: ""
         val reminderEnabled = binding.switchReminder.isChecked

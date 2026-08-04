@@ -65,5 +65,18 @@
     <string name="done_tasks">Erledigte Aufgaben</string>
     <string name="overdue_tasks">Überfällige Aufgaben</string>
     <string name="today_tasks">Heute fällige Aufgaben</string>
-    <string name="search_results">Suchergebnisse</string>
+    <string name="tab_settings">Kategorien</string>
+    <string name="settings_category_title">Kategorienamen</string>
+    <string name="settings_category_hint">Lege eigene Anzeigenamen für die Kategorien fest.</string>
+    <string name="settings_reset_title">Zurücksetzen</string>
+    <string name="settings_reset_message">Alle Kategorienamen auf Standard zurücksetzen?</string>
+    <string name="settings_reset_button">Zurücksetzen</string>
+    <string name="settings_reset_done">Kategorienamen zurückgesetzt</string>
+    <string name="settings_saved">Kategorienamen gespeichert</string>
+    <string name="settings_name_empty_error">Kein Kategoriename darf leer sein</string>
+    <string name="settings_name_duplicate_error">Kategorienamen müssen eindeutig sein</string>
+    <string name="category_task_default">Aufgabe (Standard)</string>
+    <string name="category_reminder_default">Erinnerung (Standard)</string>
+    <string name="category_note_default">Notiz (Standard)</string>
+    <string name="category_idea_default">Idee (Standard)</string>
 </resources>
